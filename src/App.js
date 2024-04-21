@@ -1,23 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { useState } from "react";
+import Cameras from "./components/Cameras";
 
 function App() {
+  const [selectedCamera, setSelectedCamera] = useState('front');
+  const [zoom, setZoom] = useState(1);
+  const [previewImage, setPreviewImage] = useState(null);
+  const [capturedImages, setCapturedImages] = useState([]);
+
+  const handleCameraToggle = () => {
+    setSelectedCamera(selectedCamera === 'front' ? 'back' : 'front');
+  };
+
+  const handleCapture = (imageSrc) => {
+    setPreviewImage(imageSrc);
+    setCapturedImages([...capturedImages, imageSrc]);
+  };
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Cameras 
+        selectedCamera={selectedCamera}
+        onCameraToggle={handleCameraToggle}
+        onCapture={handleCapture}
+        zoom={zoom} />
     </div>
   );
 }

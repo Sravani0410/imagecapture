@@ -60,14 +60,20 @@
     font-weight: bold;
   }
 
+  @media (max-width: 800px) {
+    .gallery {
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 5px;
+    }
+  }
+  
   @media (max-width: 600px) {
     .camera-preview {
       width: 100%;
       height: auto;
     }
-  
     .gallery {
       grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: 5px;
     }
   }
-  

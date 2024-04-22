@@ -48,28 +48,55 @@ const Cameras = ({ addImage, setLoading, setError, loading, error }) => {
   
       const visibleWidth = video.clientWidth * zoom;
       const visibleHeight = video.clientHeight * zoom;
+      const videoAspectRatio = video.videoWidth / video.videoHeight;
   
       canvas.width = visibleWidth;
       canvas.height = visibleHeight;
   
+      let croppedWidth = visibleWidth;
+      let croppedHeight = visibleHeight;
+      let xOffset = 0;
+      let yOffset = 0;
+  
       if (aspectRatio === '16:9') {
-        const croppedWidth = visibleHeight * (16 / 9);
-        const xOffset = (visibleWidth - croppedWidth) / 2;
-        context.drawImage(video, xOffset, 0, croppedWidth, visibleHeight, 0, 0, croppedWidth, visibleHeight);
+        const targetAspectRatio = 16 / 9;
+        if (videoAspectRatio > targetAspectRatio) {
+          croppedHeight = visibleWidth / targetAspectRatio;
+          yOffset = (visibleHeight - croppedHeight) / 2;
+        } else {
+          croppedWidth = visibleHeight * targetAspectRatio;
+          xOffset = (visibleWidth - croppedWidth) / 2;
+        }
       } else if (aspectRatio === '4:3') {
-        const croppedWidth = visibleHeight * (4 / 3);
-        const xOffset = (visibleWidth - croppedWidth) / 2;
-        context.drawImage(video, xOffset, 0, croppedWidth, visibleHeight, 0, 0, croppedWidth, visibleHeight);
+        const targetAspectRatio = 4 / 3;
+        if (videoAspectRatio > targetAspectRatio) {
+          croppedHeight = visibleWidth / targetAspectRatio;
+          yOffset = (visibleHeight - croppedHeight) / 2;
+        } else {
+          croppedWidth = visibleHeight * targetAspectRatio;
+          xOffset = (visibleWidth - croppedWidth) / 2;
+        }
       } else if (aspectRatio === '1:1') {
-        const minDimension = Math.min(visibleWidth, visibleHeight);
-        canvas.width = minDimension;
-        canvas.height = minDimension;
-        const xOffset = (visibleWidth - minDimension) / 2;
-        const yOffset = (visibleHeight - minDimension) / 2;
-        context.drawImage(video, xOffset, yOffset, minDimension, minDimension, 0, 0, minDimension, minDimension);
-      } else {
-        context.drawImage(video, 0, 0, visibleWidth, visibleHeight);
+        if (visibleWidth < visibleHeight) {
+          croppedHeight = visibleWidth;
+          yOffset = (visibleHeight - croppedHeight) / 2;
+        } else {
+          croppedWidth = visibleHeight;
+          xOffset = (visibleWidth - croppedWidth) / 2;
+        }
       }
+  
+      context.drawImage(
+        video,
+        xOffset,
+        yOffset,
+        croppedWidth,
+        croppedHeight,
+        0,
+        0,
+        visibleWidth,
+        visibleHeight
+      );
   
       const imageSrc = canvas.toDataURL('image/png');
       setCapturedImages(prevImages => [...prevImages, imageSrc]);
@@ -81,6 +108,7 @@ const Cameras = ({ addImage, setLoading, setError, loading, error }) => {
       setLoading(false);
     }
   }, [webcamRef, zoom, aspectRatio, addImage, setLoading, setError, selectedCamera]);
+  
   
   useEffect(() => {
     console.log('Captured Images:', capturedImages);

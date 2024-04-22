@@ -9,7 +9,7 @@ function App() {
   const [capturedImages, setCapturedImages] = useState([]);
 
   const handleCameraToggle = () => {
-    setSelectedCamera(selectedCamera === 'front' ? 'back' : 'front');
+    setSelectedCamera(selectedCamera === 'user' ? 'environment' : 'user');
   };
 
   const handleCapture = (imageSrc) => {

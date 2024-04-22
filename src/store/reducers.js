@@ -1,4 +1,4 @@
-import { ADD_IMAGE, SET_LOADING, SET_ERROR, DELETE_IMAGE } from './actions'; 
+import { ADD_IMAGE, DELETE_IMAGE } from './actions'; 
 
 const initialState = {
   images: [],

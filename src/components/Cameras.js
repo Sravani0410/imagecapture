@@ -12,7 +12,7 @@ const Cameras = ({ addImage, setLoading, setError, loading, error }) => {
   const [capturedImages, setCapturedImages] = useState([]);
   const [videoWidth, setVideoWidth] = useState(540);
   const [videoHeight, setVideoHeight] = useState(302);
-  const [selectedCamera, setSelectedCamera] = useState('front');
+  const [selectedCamera, setSelectedCamera] = useState('user');
 
   const updateVideoConstraints = useCallback(() => {
     if (aspectRatio === '16:9') {
@@ -36,7 +36,9 @@ const Cameras = ({ addImage, setLoading, setError, loading, error }) => {
     height: videoHeight,
     facingMode: selectedCamera,
   };    
-
+  const handleCameraToggle = () => {
+    setSelectedCamera(selectedCamera === 'user' ? 'environment' : 'user');
+  };
   const capturePhoto = useCallback(async () => {
     try {
       setLoading(true);
@@ -105,7 +107,7 @@ const Cameras = ({ addImage, setLoading, setError, loading, error }) => {
       <div className="camera-preview">
         <Webcam
           ref={webcamRef}
-          audio={true}
+          audio={false}
           screenshotFormat='image/png'
           videoConstraints={videoConstraints}
           mirrored={true}
@@ -126,7 +128,7 @@ const Cameras = ({ addImage, setLoading, setError, loading, error }) => {
           <button onClick={() => handleAspectRatioChange('1:1')}>1:1</button>
         </div>
         <select value={selectedCamera} onChange={handleCameraChange}>
-           <option value="front">Front Cam</option>
+           <option value="user">Front Cam</option>
            <option value="environment">Back Cam</option>
         </select>
       </div>

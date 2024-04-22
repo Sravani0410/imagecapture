@@ -9,7 +9,6 @@ const Gallery = ({ capturedImages, deleteImage }) => {
 
   return (
     <div className="gallery">
-      {console.log("capturedImages",capturedImages)}
       {capturedImages.map((image, index) => (
         <div key={index} className="image-container">
           <img src={image} alt={`Image ${index}`} />

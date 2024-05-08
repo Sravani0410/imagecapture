@@ -21,7 +21,7 @@ const Cameras = ({ addImage, setLoading, setError, loading, error }) => {
     } else if (aspectRatio === '4:3') {
       setVideoWidth(540);
       setVideoHeight(405);
-    } else if (aspectRatio === '1:1') {
+    } else if (aspectRatio === "1:1") {
       setVideoWidth(540);
       setVideoHeight(540);
     }
@@ -141,23 +141,25 @@ const Cameras = ({ addImage, setLoading, setError, loading, error }) => {
           mirrored={true}
           style={{ transform: `scale(${zoom})` }}
         />
-      </div>
-      <div className="controls">
-        <div>
-          <button onClick={capturePhoto} disabled={loading}>
-            {loading ? 'Capturing...' : 'Capture'}
-          </button>
+          <div className="zoom">
           <button onClick={handleZoomIn}>Zoom In</button>
           <button onClick={handleZoomOut}>Zoom Out</button>
-        </div>
-        <div>
-          <button onClick={() => handleAspectRatioChange('16:9')}>16:9</button>
-          <button onClick={() => handleAspectRatioChange('4:3')}>4:3</button>
-          <button onClick={() => handleAspectRatioChange('1:1')}>1:1</button>
-        </div>
+          </div>
+          <div className="aspect-ratio-controls">
+            <button onClick={() => handleAspectRatioChange("16:9")}>
+              16:9
+            </button>
+            <button onClick={() => handleAspectRatioChange("4:3")}>4:3</button>
+            <button onClick={() => handleAspectRatioChange("1:1")}>1:1</button>
+          </div>        
+      </div>
+      <div className="capture">
+      <button onClick={capturePhoto} disabled={loading}>
+          {loading ? "Capturing..." : "Capture"}
+        </button>
         <select value={selectedCamera} onChange={handleCameraChange}>
-           <option value="user">Front Cam</option>
-           <option value="environment">Back Cam</option>
+          <option value="user">Front Cam</option>
+          <option value="environment">Back Cam</option>
         </select>
       </div>
       <Gallery capturedImages={capturedImages} />

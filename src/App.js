@@ -18,6 +18,7 @@ function App() {
   };
   return (
     <div className="App">
+      <h1>Image Capture</h1>
       <Cameras 
         selectedCamera={selectedCamera}
         onCameraToggle={handleCameraToggle}

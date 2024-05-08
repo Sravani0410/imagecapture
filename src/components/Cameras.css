@@ -1,79 +1,111 @@
-   .cameras-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    background-color: #f8f9fa;
+.cameras-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background-color: #f8f9fa;
+}
+.camera-preview {
+  position: relative;
+  width: 100%;
+  max-width: 540px;
+  margin-bottom: 20px;
+  overflow: hidden;
+  border: 2px solid #ccc;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+.gallery-slider {
+  display: none;
+}
+
+.gallery-slider.visible {
+  display: block;
+}
+
+.zoom {
+  position: absolute;
+  bottom: 240px;
+  left: 20px;
+  display: flex;
+  flex-direction: column;
+  z-index: 1;
+  /* background-color: rgba(0, 123, 255, 0.8); */
+  padding: 10px;
+  border-radius: 5px;
+}
+.aspect-ratio-controls {
+  position: absolute;
+  bottom: 220px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  z-index: 1;
+  /* background-color: rgba(0, 123, 255, 0.8); */
+  padding: 10px;
+  border-radius: 5px;
+}
+.aspect-ratio-controls button,
+.zoom button {
+  margin-bottom: 5px;
+  border: none;
+  background-color: #007bff;
+}
+.capture button,
+.capture select {
+  margin: 0 10px;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  background-color: #007bff;
+  color: #fff;
+  cursor: pointer;
+}
+.zoom button:hover,
+.aspect-ratio-controls button:hover {
+  background-color: #adb300;
+}
+.zoom button:disabled,
+.aspect-ratio-controls button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+}
+
+.gallery img {
+  width: 100%;
+  height: auto;
+  border-radius: 5px;
+  transition: transform 0.2s ease-in-out;
+}
+
+.gallery img:hover {
+  transform: scale(1.1);
+}
+
+.error {
+  color: red;
+  font-weight: bold;
+}
+
+@media (max-width: 800px) {
+  .gallery {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 5px;
   }
+}
+
+@media (max-width: 600px) {
   .camera-preview {
     width: 100%;
-    max-width: 540px; 
-    margin-bottom: 20px;
-    overflow: hidden; 
-    border: 2px solid #ccc;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  }
-  
-  .controls {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 20px;
-  }
-  
-  .controls button {
-    padding: 10px 20px;
-    font-size: 16px;
-    border: none;
-    background-color: #007bff;
-    color: #fff;
-    cursor: pointer;
-  }
-  .controls button:hover {
-    background-color: #0056b3;
-  }
-  .controls button:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-  }
-  
-  .gallery {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 10px;
-  }
-  
-  .gallery img {
-    width: 100%;
     height: auto;
-    border-radius: 5px;
-    transition: transform 0.2s ease-in-out;
   }
-  
-  .gallery img:hover {
-    transform: scale(1.1);
+  .gallery {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 5px;
   }
-  
-  .error {
-    color: red;
-    font-weight: bold;
-  }
-
-  @media (max-width: 800px) {
-    .gallery {
-      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-      gap: 5px;
-    }
-  }
-  
-  @media (max-width: 600px) {
-    .camera-preview {
-      width: 100%;
-      height: auto;
-    }
-    .gallery {
-      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-      gap: 5px;
-    }
-  }
+}

@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { addImage, setLoading, setError } from '../store/actions';
 import "./Cameras.css"
 import Gallery from './gallery';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCamera, faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
 
 const Cameras = ({ addImage, setLoading, setError, loading, error }) => {
   const webcamRef = useRef(null);
@@ -142,8 +144,8 @@ const Cameras = ({ addImage, setLoading, setError, loading, error }) => {
           style={{ transform: `scale(${zoom})` }}
         />
           <div className="zoom">
-          <button onClick={handleZoomIn}>Zoom In</button>
-          <button onClick={handleZoomOut}>Zoom Out</button>
+          <button onClick={handleZoomIn}><FontAwesomeIcon icon={faPlus}/></button>
+          <button onClick={handleZoomOut}><FontAwesomeIcon icon={faMinus}/></button>
           </div>
           <div className="aspect-ratio-controls">
             <button onClick={() => handleAspectRatioChange("16:9")}>
@@ -155,7 +157,7 @@ const Cameras = ({ addImage, setLoading, setError, loading, error }) => {
       </div>
       <div className="capture">
       <button onClick={capturePhoto} disabled={loading}>
-          {loading ? "Capturing..." : "Capture"}
+          {loading ? "Capturing..." : <FontAwesomeIcon icon={faCamera} />}
         </button>
         <select value={selectedCamera} onChange={handleCameraChange}>
           <option value="user">Front Cam</option>

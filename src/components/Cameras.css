@@ -5,6 +5,9 @@
   padding: 20px;
   background-color: #f8f9fa;
 }
+.cameras-container > * {
+  margin-bottom: 20px;
+}
 .camera-preview {
   position: relative;
   width: 100%;
@@ -24,31 +27,34 @@
 
 .zoom {
   position: absolute;
-  bottom: 240px;
-  left: 20px;
-  display: flex;
-  flex-direction: column;
-  z-index: 1;
-  /* background-color: rgba(0, 123, 255, 0.8); */
-  padding: 10px;
-  border-radius: 5px;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
 }
 .aspect-ratio-controls {
   position: absolute;
-  bottom: 220px;
-  right: 20px;
+  top: 10px;
+  right: 10px;
   display: flex;
   flex-direction: column;
-  z-index: 1;
-  /* background-color: rgba(0, 123, 255, 0.8); */
-  padding: 10px;
-  border-radius: 5px;
 }
-.aspect-ratio-controls button,
-.zoom button {
-  margin-bottom: 5px;
+.zoom button{
+  margin: 0 5px;
+  padding: 5px 10px;
+  font-size: 14px;
   border: none;
-  background-color: #007bff;
+  background-color: #a7c6e6;
+  color: #fff;
+  cursor: pointer;
+}
+.aspect-ratio-controls button {
+  margin-bottom: 10px;
+  padding: 5px 10px;
+  font-size: 14px;
+  border: none;
+  background-color: #a7c6e6;
+  color: #fff;
+  cursor: pointer;
 }
 .capture button,
 .capture select {
@@ -56,8 +62,8 @@
   padding: 10px 20px;
   font-size: 16px;
   border: none;
-  background-color: #007bff;
-  color: #fff;
+  background-color: #a7c6e6;
+  /* color: #fff; */
   cursor: pointer;
 }
 .zoom button:hover,

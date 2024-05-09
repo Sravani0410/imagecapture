@@ -1,26 +1,26 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import Webcam from 'react-webcam';
-import { connect } from 'react-redux';
-import { addImage, setLoading, setError } from '../store/actions';
-import "./Cameras.css"
-import Gallery from './gallery';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCamera, faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import Webcam from "react-webcam";
+import { connect } from "react-redux";
+import { addImage, setLoading, setError } from "../store/actions";
+import "./Cameras.css";
+import Gallery from "./gallery";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCamera, faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
 
 const Cameras = ({ addImage, setLoading, setError, loading, error }) => {
   const webcamRef = useRef(null);
   const [zoom, setZoom] = useState(1);
-  const [aspectRatio, setAspectRatio] = useState('16:9');
+  const [aspectRatio, setAspectRatio] = useState("16:9");
   const [capturedImages, setCapturedImages] = useState([]);
   const [videoWidth, setVideoWidth] = useState(540);
   const [videoHeight, setVideoHeight] = useState(302);
-  const [selectedCamera, setSelectedCamera] = useState('user');
+  const [selectedCamera, setSelectedCamera] = useState("user");
 
   const updateVideoConstraints = useCallback(() => {
-    if (aspectRatio === '16:9') {
+    if (aspectRatio === "16:9") {
       setVideoWidth(540);
       setVideoHeight(302);
-    } else if (aspectRatio === '4:3') {
+    } else if (aspectRatio === "4:3") {
       setVideoWidth(540);
       setVideoHeight(405);
     } else if (aspectRatio === "1:1") {
@@ -37,83 +37,64 @@ const Cameras = ({ addImage, setLoading, setError, loading, error }) => {
     width: videoWidth,
     height: videoHeight,
     facingMode: selectedCamera,
-  };    
+  };
   const handleCameraToggle = () => {
-    setSelectedCamera(selectedCamera === 'user' ? 'environment' : 'user');
+    setSelectedCamera(selectedCamera === "user" ? "environment" : "user");
   };
   const capturePhoto = useCallback(async () => {
     try {
       setLoading(true);
       const video = webcamRef.current.video;
-      const canvas = document.createElement('canvas');
-      const context = canvas.getContext('2d');
-  
+      const canvas = document.createElement("canvas");
+      const context = canvas.getContext("2d");
+
       const visibleWidth = video.clientWidth * zoom;
       const visibleHeight = video.clientHeight * zoom;
       const videoAspectRatio = video.videoWidth / video.videoHeight;
-  
-      canvas.width = visibleWidth;
-      canvas.height = visibleHeight;
-  
-      let croppedWidth = visibleWidth;
-      let croppedHeight = visibleHeight;
-      let xOffset = 0;
-      let yOffset = 0;
-  
-      if (aspectRatio === '16:9') {
-        const targetAspectRatio = 16 / 9;
-        if (videoAspectRatio > targetAspectRatio) {
-          croppedHeight = visibleWidth / targetAspectRatio;
-          yOffset = (visibleHeight - croppedHeight) / 2;
-        } else {
-          croppedWidth = visibleHeight * targetAspectRatio;
-          xOffset = (visibleWidth - croppedWidth) / 2;
-        }
-      } else if (aspectRatio === '4:3') {
-        const targetAspectRatio = 4 / 3;
-        if (videoAspectRatio > targetAspectRatio) {
-          croppedHeight = visibleWidth / targetAspectRatio;
-          yOffset = (visibleHeight - croppedHeight) / 2;
-        } else {
-          croppedWidth = visibleHeight * targetAspectRatio;
-          xOffset = (visibleWidth - croppedWidth) / 2;
-        }
-      } else if (aspectRatio === '1:1') {
-        if (visibleWidth < visibleHeight) {
-          croppedHeight = visibleWidth;
-          yOffset = (visibleHeight - croppedHeight) / 2;
-        } else {
-          croppedWidth = visibleHeight;
-          xOffset = (visibleWidth - croppedWidth) / 2;
-        }
+
+      console.log(videoAspectRatio);
+      let croppedWidth, croppedHeight;
+      if (aspectRatio === "16:9") {
+        croppedWidth = visibleWidth;
+        croppedHeight = (visibleWidth / 16) * 9;
+      } else if (aspectRatio === "4:3") {
+        croppedWidth = visibleWidth;
+        croppedHeight = (visibleWidth / 4) * 3;
+      } else if (aspectRatio === "1:1") {
+        croppedWidth = visibleWidth;
+        croppedHeight = visibleWidth;
       }
-  
+
+      canvas.width = croppedWidth;
+      canvas.height = croppedHeight;
+
+      let xOffset = (video.videoWidth - visibleWidth) / 2;
+      let yOffset = (video.videoHeight - visibleHeight) / 2;
       context.drawImage(
         video,
         xOffset,
         yOffset,
+        croppedWidth / zoom,
+        croppedHeight / zoom,
+        0,
+        0,
         croppedWidth,
-        croppedHeight,
-        0,
-        0,
-        visibleWidth,
-        visibleHeight
+        croppedHeight
       );
-  
-      const imageSrc = canvas.toDataURL('image/png');
-      setCapturedImages(prevImages => [...prevImages, imageSrc]);
-      console.log('Captured Images State:', capturedImages);
+
+      const imageSrc = canvas.toDataURL("image/png");
+      setCapturedImages((prevImages) => [...prevImages, imageSrc]);
+      console.log("Captured Images State:", capturedImages);
       addImage(imageSrc);
     } catch (error) {
-      setError('Error capturing image');
+      setError("Error capturing image");
     } finally {
       setLoading(false);
     }
-  }, [webcamRef, zoom, aspectRatio, addImage, setLoading, setError, selectedCamera]);
-  
-  
+  }, [webcamRef, zoom, aspectRatio, addImage, setLoading, setError]);
+
   useEffect(() => {
-    console.log('Captured Images:', capturedImages);
+    console.log("Captured Images:", capturedImages);
   }, [capturedImages]);
 
   const handleZoomIn = () => {
@@ -138,27 +119,31 @@ const Cameras = ({ addImage, setLoading, setError, loading, error }) => {
         <Webcam
           ref={webcamRef}
           audio={false}
-          screenshotFormat='image/png'
+          screenshotFormat="image/png"
           videoConstraints={videoConstraints}
           mirrored={true}
           style={{ transform: `scale(${zoom})` }}
         />
-          <div className="zoom">
-          <button onClick={handleZoomIn}><FontAwesomeIcon icon={faPlus}/></button>
-          <button onClick={handleZoomOut}><FontAwesomeIcon icon={faMinus}/></button>
-          </div>
-          <div className="aspect-ratio-controls">
-            <button onClick={() => handleAspectRatioChange("16:9")}>
-              16:9
-            </button>
-            <button onClick={() => handleAspectRatioChange("4:3")}>4:3</button>
-            <button onClick={() => handleAspectRatioChange("1:1")}>1:1</button>
-          </div>        
+        <div className="zoom">
+          <button onClick={handleZoomIn}>
+            <FontAwesomeIcon icon={faPlus} />
+          </button>
+          <button onClick={handleZoomOut}>
+            <FontAwesomeIcon icon={faMinus} />
+          </button>
+        </div>
+        <div className="aspect-ratio-controls">
+          <button onClick={() => handleAspectRatioChange("16:9")}>16:9</button>
+          <button onClick={() => handleAspectRatioChange("4:3")}>4:3</button>
+          <button onClick={() => handleAspectRatioChange("1:1")}>1:1</button>
+        </div>
+        <div className="capture-camera">
+          <button onClick={capturePhoto} disabled={loading}>
+            {loading ? "Capturing..." : <FontAwesomeIcon icon={faCamera} />}
+          </button>
+        </div>
       </div>
       <div className="capture">
-      <button onClick={capturePhoto} disabled={loading}>
-          {loading ? "Capturing..." : <FontAwesomeIcon icon={faCamera} />}
-        </button>
         <select value={selectedCamera} onChange={handleCameraChange}>
           <option value="user">Front Cam</option>
           <option value="environment">Back Cam</option>
@@ -174,4 +159,6 @@ const mapStateToProps = (state) => ({
   error: state.error,
 });
 
-export default connect(mapStateToProps, { addImage, setLoading, setError })(Cameras);
+export default connect(mapStateToProps, { addImage, setLoading, setError })(
+  Cameras
+);

@@ -12,7 +12,9 @@ const Gallery = ({ capturedImages, deleteImage }) => {
       {capturedImages.map((image, index) => (
         <div key={index} className="image-container">
           <img src={image} alt={`Image ${index}`} />
-          <button onClick={() => handleDelete(index)}>Delete</button>
+          <button onClick={() => handleDelete(index)} className="delete-button">
+          <i className="fas fa-trash"></i>
+          </button>
         </div>
       ))}
     </div>

@@ -17,19 +17,21 @@
   border: 2px solid #ccc;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
-.gallery-slider {
-  display: none;
-}
-
-.gallery-slider.visible {
-  display: block;
-}
-
 .zoom {
   position: absolute;
-  bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%);
+  top: 10px;
+  left: 10px;
+  display: flex;
+  flex-direction: column;
+}
+.zoom button {
+  margin: 5px 0;
+  padding: 5px 10px;
+  font-size: 14px;
+  border: none;
+  background-color: #a7c6e6;
+  color: #fff;
+  cursor: pointer;
 }
 .aspect-ratio-controls {
   position: absolute;
@@ -37,15 +39,6 @@
   right: 10px;
   display: flex;
   flex-direction: column;
-}
-.zoom button{
-  margin: 0 5px;
-  padding: 5px 10px;
-  font-size: 14px;
-  border: none;
-  background-color: #a7c6e6;
-  color: #fff;
-  cursor: pointer;
 }
 .aspect-ratio-controls button {
   margin-bottom: 10px;
@@ -56,7 +49,28 @@
   color: #fff;
   cursor: pointer;
 }
-.capture button,
+.capture-camera {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.capture-camera button {
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  padding: 0;
+  background-color: #a7c6e6;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  font-size: 24px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
 .capture select {
   margin: 0 10px;
   padding: 10px 20px;
@@ -67,11 +81,13 @@
   cursor: pointer;
 }
 .zoom button:hover,
-.aspect-ratio-controls button:hover {
+.aspect-ratio-controls button:hover,
+.capture-camera button:hover {
   background-color: #adb300;
 }
 .zoom button:disabled,
-.aspect-ratio-controls button:disabled {
+.aspect-ratio-controls button:disabled,
+.capture-camera button:disabled {
   background-color: #ccc;
   cursor: not-allowed;
 }
@@ -85,12 +101,30 @@
 .gallery img {
   width: 100%;
   height: auto;
+  /* object-fit: cover;  */
   border-radius: 5px;
   transition: transform 0.2s ease-in-out;
 }
 
 .gallery img:hover {
   transform: scale(1.1);
+}
+
+.image-container {
+  position: relative;
+}
+
+.delete-button {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #a7c6e6;
+}
+.delete-button :hover {
+  color: #ff0000;
 }
 
 .error {

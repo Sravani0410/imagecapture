@@ -5,7 +5,13 @@ import { addImage, setLoading, setError } from "../store/actions";
 import "./Cameras.css";
 import Gallery from "./gallery";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCamera, faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCamera,
+  faPlus,
+  faMinus,
+  faSync,
+  faCameraRotate,
+} from "@fortawesome/free-solid-svg-icons";
 
 const Cameras = ({ addImage, setLoading, setError, loading, error }) => {
   const webcamRef = useRef(null);
@@ -37,9 +43,6 @@ const Cameras = ({ addImage, setLoading, setError, loading, error }) => {
     width: videoWidth,
     height: videoHeight,
     facingMode: selectedCamera,
-  };
-  const handleCameraToggle = () => {
-    setSelectedCamera(selectedCamera === "user" ? "environment" : "user");
   };
   const capturePhoto = useCallback(async () => {
     try {
@@ -109,8 +112,8 @@ const Cameras = ({ addImage, setLoading, setError, loading, error }) => {
     setAspectRatio(ratio);
   };
 
-  const handleCameraChange = (event) => {
-    setSelectedCamera(event.target.value);
+  const handleCameraChange = () => {
+    setSelectedCamera(selectedCamera === "user" ? "environment" : "user");
   };
 
   return (
@@ -141,13 +144,14 @@ const Cameras = ({ addImage, setLoading, setError, loading, error }) => {
           <button onClick={capturePhoto} disabled={loading}>
             {loading ? "Capturing..." : <FontAwesomeIcon icon={faCamera} />}
           </button>
+          <button onClick={handleCameraChange}>
+            {selectedCamera === "user" ? (
+              <FontAwesomeIcon icon={faSync} />
+            ) : (
+              <FontAwesomeIcon icon={faCameraRotate} />
+            )}
+          </button>
         </div>
-      </div>
-      <div className="capture">
-        <select value={selectedCamera} onChange={handleCameraChange}>
-          <option value="user">Front Cam</option>
-          <option value="environment">Back Cam</option>
-        </select>
       </div>
       <Gallery capturedImages={capturedImages} />
     </div>
